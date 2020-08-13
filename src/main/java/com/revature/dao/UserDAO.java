@@ -1,10 +1,20 @@
 package com.revature.dao;
 
+import java.util.List; 
+import java.util.Set;
+
 import com.revature.models.User;
 
 public interface UserDAO {
-	public void addUser(User u);
-	public void updateUsername(User u);
-	public void balanceChange( User u);
-	public User checkPassword(String password);
+	
+	public Set<User> getAllUsers();
+	
+	public boolean addUser(User u);
+	public boolean updateCredential(User u);
+	public boolean removeUser(User u);
+	
+	public User getUserById(String id);
+//	public User checkUser(String field, String value);
+	
+	
 }

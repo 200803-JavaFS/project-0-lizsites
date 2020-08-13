@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import com.revature.dao.AccountDAO;
+import com.revature.dao.AccountDAOImp;
 import com.revature.dao.UserDAO;
 import com.revature.dao.UserDAOImp;
 
@@ -18,8 +20,8 @@ import com.revature.dao.UserDAOImp;
 
 public class DAOUtilities {
 	private static final String CONNECTION_USERNAME = "postgres";
-	private static final String CONNECTION_PASSWORD = "KikiChord96!";
-	private static final String CONNECTION_URL = "jdbc:postgresql://localhost:5432/BankOfLiz";
+	private static final String CONNECTION_PASSWORD = "password";
+	private static final String CONNECTION_URL = "jdbc:postgresql://javafs200803.cg0rpxexvjxn.us-east-2.rds.amazonaws.com/bankofliz";
 	private static Connection connection;
 	
 	public static synchronized Connection getConnection() throws SQLException {
@@ -55,6 +57,20 @@ public class DAOUtilities {
 	 * */
 	public static UserDAO getUserDAO () {
 		return new UserDAOImp();
+	}
+	
+	public static AccountDAO getAccountDAO () {
+		return new AccountDAOImp();
+	}
+	
+	
+	public static void main (String[]args) {
+		
+		try(Connection conn = DAOUtilities.getConnection()){
+			System.out.println("yay you did it!");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
 	
