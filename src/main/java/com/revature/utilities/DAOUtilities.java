@@ -43,9 +43,7 @@ public class DAOUtilities {
 		
 		if (connection == null) {
 			System.out.println("connection is closed....");
-		} else {
-			System.out.println("Connection successful!!!!");
-		}
+		} 
 		
 		return connection;
 	}

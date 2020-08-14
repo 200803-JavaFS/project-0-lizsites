@@ -1,10 +1,12 @@
 package com.revature.test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue; 
 
 import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,6 +15,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.revature.dao.AccountDAO;
 import com.revature.dao.UserDAO;
 import com.revature.models.Account;
 import com.revature.models.Admin;
@@ -36,26 +39,61 @@ public class TestUsers {
 	public static void recur() {
 		recur();
 	}
-	public static User testUser = new User("dan125" , "Daniel" , "lincoln", "dovetail" , "human" );
+	public static User testUser = new User("Daniella123" , "Daniel" , "lincoln", "dovetail" , "human" );
+	public static Account testAccount = new Account("checking" , 5000);
+	public static AccountDAO accountDao = DAOUtilities.getAccountDAO();
 	public static UserDAO userDAO = DAOUtilities.getUserDAO();
 	
 	User result;
+	
+		
 	
 		@BeforeClass
 		public static void initiliazeTest() {
 			userDAO.removeUser(testUser);
 			assertTrue(userDAO.addUser(testUser));
-		
+			
 		
 	}
+		@Test
+		public void testAddAccount() {
+			accountDao.addAccount(testAccount, testUser);
+			assertTrue(accountDao.searchAccountsByUserId(testUser.getUserName())!=null);
+		}
 		
 		@Test
-		public void checkUserAdd() {
-			UserDAO userDAO = DAOUtilities.getUserDAO();
+		public void checkAdminAlter() {
+			
 			Admin a = new Admin();
 			a.modifyUser();
-			result = userDAO.getUserById(testUser.getUserName());
-			assertTrue(testUser.getUserName().equals("Daniella123"));
+			User result = userDAO.getUserById("Daniella123");
+			assertTrue(result.getFirstName().equals("Daniella"));
+		}
+		
+		@Test
+		public void roleChange() {
+			
+			Admin a = new Admin();
+			a.modifyUser();
+			User result = userDAO.getUserById("Daniella123");
+			assertTrue(result.getRole().equals("Employee"));
+		}
+		
+		@Test
+		public void passwordChange() {
+			
+			Admin a = new Admin();
+			a.modifyUser();
+			User result = userDAO.getUserById("Daniella123");
+			assertTrue(result.getPassword().equals("password1"));
+		}
+		
+		@Test
+		public void seeAccounts() {
+			Admin a = new Admin();
+			a.modifyUser();
+			Set<Account> resultTest = accountDao.searchAccountsByUserId(testUser.getUserName());
+			assertTrue(resultTest!=null);
 		}
 		
 		@AfterClass

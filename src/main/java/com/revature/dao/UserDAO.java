@@ -10,7 +10,7 @@ public interface UserDAO {
 	public Set<User> getAllUsers();
 	
 	public boolean addUser(User u);
-	public boolean updateCredential(User u);
+	public boolean updateCredential(User u, String oldId);
 	public boolean removeUser(User u);
 	
 	public User getUserById(String id);

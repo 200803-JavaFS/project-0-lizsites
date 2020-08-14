@@ -1,9 +1,15 @@
 package com.revature.models;
 
-public class Account {
+import java.io.Serializable;
+
+public class Account implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/*This is the primary key*/
-	private String id;
+	private int id;
 	private String accountName;
 	private String status;
 	private double balance;
@@ -11,7 +17,7 @@ public class Account {
 	
 	
 
-	public Account(String id, String accountName, String status, double balance) {
+	public Account(int id, String accountName, String status, double balance) {
 		super();
 		this.id = id;
 		this.accountName = accountName;
@@ -20,9 +26,8 @@ public class Account {
 	}
 
 
-	public Account(String id, String accountName, double balance) {
+	public Account(String accountName, double balance) {
 		super();
-		this.id = id;
 		this.accountName = accountName;
 		this.balance = balance;
 		this.status = "pending";
@@ -34,14 +39,14 @@ public class Account {
 
 
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
 
 
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

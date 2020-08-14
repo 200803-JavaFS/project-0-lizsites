@@ -11,6 +11,9 @@ public interface AccountDAO {
 	public Set<Account> getAllAccounts();
 	public Set<Account> searchAccountsByUserId(String userid);
 	
+	public Account getAccountBySerial(int id);
+	
+	
 	public boolean addAccount(Account account);
 	public boolean addAccount(Account account, User u);
 	public void removeAccount(Account account);

@@ -25,7 +25,7 @@ public class AccountDAOImp implements AccountDAO {
 			ps = conn.prepareStatement(sql1);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				Account account = new Account (rs.getString(1), rs.getString(2) , rs.getString(3), rs.getDouble(4));
+				Account account = new Account (rs.getInt(1), rs.getString(2) , rs.getString(3), rs.getDouble(4));
 				accounts.add(account);
 		}
 			
@@ -35,16 +35,39 @@ public class AccountDAOImp implements AccountDAO {
 		return accounts;
 	}
 	
+	public Account getAccountBySerial(int id) {
+		Account a = new Account();
+		try {
+			conn = DAOUtilities.getConnection();
+			String sql = "SELECT * from accounts where id=?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				a.setId(rs.getInt("id"));
+				a.setAccountName(rs.getString("name"));
+				a.setBalance(rs.getDouble("balance"));
+				a.setStatus(rs.getString("status"));
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return a;
+	}
+	
 	
 	/*
 	 * This is the general use add account that will be used to add a full new account
 	 * */
 	@Override
 	public boolean addAccount(Account account, User u) {
-		if (addAccount(account) && addUserToAccount(u, account)) {
+		if (addAccount(account)) {
+			if (addUserToAccount(u, account)) {
 			return true;
 		}
-		
+		}
 		return false;
 	}
 	/*
@@ -54,12 +77,12 @@ public class AccountDAOImp implements AccountDAO {
 	public boolean addAccount(Account account) {
 		try {
 			conn = DAOUtilities.getConnection();
-			String sql1 = "INSERT INTO accounts values (?,?,?,?)";
+			String sql1 = "INSERT INTO accounts (name,balance,status) values (?,?,?)";
 			ps = conn.prepareStatement(sql1);
-			ps.setString(1, account.getId());
-			ps.setString(2, account.getAccountName());
-			ps.setDouble(3, account.getBalance());
-			ps.setString(4, account.getStatus());
+			
+			ps.setString(1, account.getAccountName());
+			ps.setDouble(2, account.getBalance());
+			ps.setString(3, "pending");
 			if (ps.executeUpdate()!= 0) {
 				return true;
 			}
@@ -78,7 +101,7 @@ public class AccountDAOImp implements AccountDAO {
 		String sql1 = "INSERT INTO accounts_association (userid,id) values (?,?)";
 		ps = conn.prepareStatement(sql1);
 		ps.setString(1, u.getUserName());
-		ps.setString(2, account.getId());
+		ps.setInt(2, account.getId());
 		if (ps.executeUpdate()!= 0) {
 			return true;
 		}
@@ -97,7 +120,7 @@ public class AccountDAOImp implements AccountDAO {
 		conn = DAOUtilities.getConnection();
 		String sql1 = "DELETE FROM accounts where id=?";
 		ps = conn.prepareStatement(sql1);
-		ps.setString(1, account.getId());
+		ps.setInt(1, account.getId());
 		ps.executeUpdate();
 		
 		System.out.println("removeAccount() has finished");
@@ -113,7 +136,7 @@ public class AccountDAOImp implements AccountDAO {
 			conn = DAOUtilities.getConnection();
 			String sql1 = "SELECT * FROM accounts where userid=?";
 			ps = conn.prepareStatement(sql1);
-			ps.setString(1, account.getId());
+			ps.setInt(1, account.getId());
 			ResultSet rs = ps.executeQuery();
 			
 			while (rs.next()) {
@@ -141,7 +164,7 @@ public class AccountDAOImp implements AccountDAO {
 		ps.setString(1, userid);
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
-			Account account = new Account (rs.getString(1), rs.getString(2) , rs.getString(3), rs.getDouble(4));
+			Account account = new Account (rs.getInt(1), rs.getString(2) , rs.getString(3), rs.getDouble(4));
 			searchAccount.add(account);
 		}
 		} catch (SQLException e) {

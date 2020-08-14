@@ -18,7 +18,7 @@ public class UserDAOImp implements UserDAO {
 	Connection conn;
 	PreparedStatement ps;
 	private static AccountDAO accountDAO = DAOUtilities.getAccountDAO();
-	private static final Logger logger = new Logger(UserDAO.class);
+	
 	public Set<User> getAllUsers(){
 		Set<User> users = new HashSet<>();
 		try {
@@ -51,7 +51,7 @@ public class UserDAOImp implements UserDAO {
 	public boolean addUser(User u) {
 		try {
 			conn = DAOUtilities.getConnection();
-			String sql1 = "INSERT INTO users VALUES (? , ? , ?, ?, ?)";
+			String sql1 = "INSERT INTO users (userid, first_name, last_name, password, roles) VALUES (? , ? , ?, ?, ?)";
 			ps = conn.prepareStatement(sql1);
 			ps.setString(1, u.getUserName());
 			ps.setString(2, u.getFirstName());
@@ -72,20 +72,21 @@ public class UserDAOImp implements UserDAO {
 	/*
 	 * I'm going to attempt to use generics to 
 	 * avoid writing redundant DAO methods.
+	 * 08/13/2020 -- It didn't work
 	 * */
 	
 	@Override
-	public boolean updateCredential (User u) {
+	public boolean updateCredential (User u, String oldId) {
 		try {
 			conn = DAOUtilities.getConnection();
-			String sql1 = "UPDATE users  set userid=?, first_name=?,last_name=?, password=?,roles=? where userid=?";
+			String sql1 = "UPDATE users SET userid=?, first_name=?,last_name=?, password=?,roles=? where userid=?";
 			ps = conn.prepareStatement(sql1);
 			ps.setString(1, u.getUserName());
 			ps.setString(2, u.getFirstName());
 			ps.setString(3, u.getLastName());
 			ps.setString(4, u.getPassword());
 			ps.setString(5, u.getRole());
-			ps.setString(6, u.getUserName());
+			ps.setString(6, oldId);
 			if (ps.executeUpdate()!=0) {
 				return true;
 			}
@@ -120,7 +121,7 @@ public class UserDAOImp implements UserDAO {
 		User u = new  User();
 		try {
 			conn = DAOUtilities.getConnection();
-			String sql1 = "SELECT * FROM users where users.userId=?";
+			String sql1 = "SELECT * FROM users where userid=?";
 			ps = conn.prepareStatement(sql1);
 			ps.setString(1, id);
 			ResultSet rs = ps.executeQuery();
@@ -146,41 +147,4 @@ public class UserDAOImp implements UserDAO {
 		return u;
 	}
 	
-//	@Override
-//	public User checkUser(String field, String value) {
-//		User u = new User();
-//		try {
-//			conn = DAOUtilities.getConnection();
-//			String sql1 = "SELECT * FROM users where ? = ?;";
-//			ps = conn.prepareStatement(sql1);
-//			ps.setString(1, field);
-//			ps.setString(2, value);
-//			ResultSet rs = ps.executeQuery();
-//			
-//			
-//			
-//			while (rs.next()) {
-//				String userName = rs.getString(1);
-//				String firstName = rs.getString(2);
-//				String lastName = rs.getString(3);
-//				String password = rs.getString(4);
-//				String role = rs.getString(5);
-//				
-//				u.setUserName(userName);
-//				u.setFirstName(firstName);
-//				u.setLastName(lastName);
-//				u.setPassword(password);
-//				u.setRole(role);
-//				
-//				
-//			}
-//			
-//			
-//			 
-//		} catch(SQLException e) {
-//			e.printStackTrace();
-//		}
-//		return u;
-//		
-//	}
 }
