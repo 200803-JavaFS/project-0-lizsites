@@ -12,14 +12,36 @@ import com.revature.utilities.DAOUtilities;
 public class AdminService extends EmployeeService {
 	private String role = "admin";
 	
-	public void modifyUser(){
+	public void modifyUserWelcomeScreen(){
 		System.out.println("WELCOME ADMIN TO THE BANK OF MONEY STUFF");
 		System.out.println("-------------ACTIVE USERS---------------");
 		for (User u : viewAllUsers()) {
 			System.out.println(u);
 		}
 		System.out.println("|-----------------------------------------|");
-		System.out.println("Please enter User Id of User you would like to modify?");
+		System.out.println("Would you like to View and Update Users or Accounts?");
+		System.out.println("[1] for Users");
+		System.out.println("[2] for Accounts");
+		System.out.println("[3] to exit to Customer Console");
+		
+		Scanner scan = new Scanner(System.in);
+		int choice = scan.nextInt();
+		if (choice == 1) {
+		modifyUser();
+		} else if (choice == 2) {
+			AccountDAO accountDAO =DAOUtilities.getAccountDAO();
+			Set<Account> accounts = accountDAO.getAllAccounts();
+			updateAccounts(accounts, accountDAO);
+		} else if (choice == 3) {
+			BankManagement.login();
+		} else {
+			System.out.println("Incorrect Input!!!");
+			modifyUserWelcomeScreen();
+		}
+	}
+		
+		public void modifyUser() {
+		System.out.println("Please enter User Id of user and user's accounts you would like to modify?");
 		Scanner scan = new Scanner(System.in);
 		String id = scan.nextLine();
 		UserDAO userDao = DAOUtilities.getUserDAO();
@@ -40,7 +62,7 @@ public class AdminService extends EmployeeService {
 		System.out.println("3. Password");
 		System.out.println("4. Role");
 		System.out.println("5. Go to Accounts");
-		System.out.println("6. exit back to User Selection");
+		System.out.println("6. exit back to Welcome Screen");
 		System.out.println("PLEASE NOTE changes will not persist in the database until 'exit' is chosen");
 		String option = scan.nextLine();
 		switch (option) {
@@ -87,14 +109,16 @@ public class AdminService extends EmployeeService {
 				
 				
 			case "5" : 
-				Set<Account> accounts = this.getAccountsForUser(u);
-				this.updateAccounts(accounts);
+				userDao.updateCredential(u, u.getUserName());
+				AccountDAO accountDAO = DAOUtilities.getAccountDAO();
+				Set<Account> accounts = accountDAO.getAllAccounts();
+				this.updateAccounts(accounts, accountDAO);
 				break;
 				
 			
 			case "6" : 
 				userDao.updateCredential(u , u.getUserName());
-				modifyUser();
+				modifyUserWelcomeScreen();
 				break;
 				
 				
@@ -105,20 +129,17 @@ public class AdminService extends EmployeeService {
 		
 	}
 	
-	public void updateAccounts (Set<Account> accounts) {
+	public void updateAccounts (Set<Account> accounts, AccountDAO accountDAO) {
 		Scanner scan = new Scanner (System.in);
-		for (Account a : accounts) {
-		System.out.println(a);
-		}
 		
 		System.out.println("|------------ACCOUNT UPDATE MENU---------------|");
 		
 		
-		System.out.println("Would you like to approve/close any accounts?");
-		System.out.println("enter \"y\" for \"yes\" or \"n\" for \"no\"...");
-		String answer = scan.nextLine();
-		if  (answer.toLowerCase().equals("y")) {
-			System.out.println("Enter the id of account you would like to approve/close:");
+		for (Account a : accounts) {
+			System.out.println(a);
+		}
+			System.out.println("|------------------------------------------|");
+			System.out.println("Enter the id of account you would like to modify:");
 			int id = scan.nextInt();
 			scan.nextLine();
 			for (Account a : accounts) {
@@ -126,24 +147,100 @@ public class AdminService extends EmployeeService {
 					System.out.println("Account to be updated: " + a.getAccountName() +", " +"$ " +a.getBalance()+ ", " + a.getStatus());
 					System.out.println("press [1] for approve");
 					System.out.println("press [2] for decline");
-					System.out.println("press another key to return to the previous menu");
+					System.out.println("press [3] to make a deposit");
+					System.out.println("press [4] to make a withdrawal");
+					System.out.println("press [5] to make a transfer");
+					System.out.println("press [6] to go to User Menu");
+					System.out.println("press [7] to exit Customer Console");
 					int choice = scan.nextInt();
 					scan.nextLine();
-					if (choice==1) {
-					AccountDAO accountDAO = DAOUtilities.getAccountDAO();
-					a.setStatus("approved");
-					accountDAO.updateAccountStatus(a);
-					}else if (choice==2) {
-					AccountDAO accountDAO = DAOUtilities.getAccountDAO();
-					a.setStatus("declined");
-					accountDAO.updateAccountStatus(a);
-					} else {
-						updateAccounts(accounts);
+					
+					switch (choice) {
+					case 1 :
+
+						a.setStatus("approved");
+						accountDAO.updateAccountStatus(a);
+						updateAccounts(accounts, accountDAO);
+						break;
+						
+					case 2 :
+						a.setStatus("declined");
+						accountDAO.updateAccountStatus(a);
+						updateAccounts(accounts,accountDAO);
+						break;
+						
+						
+					case 3 :
+						System.out.println("account= " + a.getAccountName() + ", balance= $ " +a.getBalance() +", status= " + a.getStatus());
+						System.out.print("Amount to be Deposited:    ");
+						double amount = scan.nextDouble();
+						scan.nextLine();
+						if (accountDAO.balanceChange(a, amount)) {
+							System.out.println("Deposit successful!!!!");
+							updateAccounts(accounts,accountDAO);
+						} else {
+							System.out.println("Overdraw Error!!!!!");
+							updateAccounts(accounts,accountDAO);
+						}
+						break;
+					case 4 :
+						System.out.println("account= " + a.getAccountName() + ", balance= $ " +a.getBalance() +", status= " + a.getStatus());
+						System.out.print("Amount to be Withdrawn: ");
+						double withdrawal = scan.nextDouble();
+						scan.nextLine();
+						accountDAO = DAOUtilities.getAccountDAO();
+						if (accountDAO.balanceChange(a, -withdrawal)) {
+							System.out.println("Withdrawal successful!!!!");
+							updateAccounts(accounts,accountDAO);
+						} else {
+							System.out.println("Overdraw Error!!!!!!!");
+							updateAccounts(accounts,accountDAO);
+						}
+						break;
+						
+					case 5 :
+						System.out.println("Please enter the id of the account you would like to transfer to: ");
+						System.out.print("Id: ");
+						id = scan.nextInt();
+						scan.nextLine();
+						for (Account acc : accounts) {
+							if (id==acc.getId()) {
+								System.out.println("Is it this account? name= " + acc.getAccountName() + ", balance= " + acc.getBalance() + ", status= " + acc.getStatus());
+								System.out.print("[y] / [n]");
+								String yesno = scan.nextLine();
+								if (yesno.toLowerCase().equals("y")) {
+									System.out.println("Amount to be transferred: ");
+									System.out.print("Amount: ");
+									amount = scan.nextDouble();
+									scan.nextLine();
+									if (accountDAO.transfer(acc, a, amount)) {
+										System.out.println("Transfer successful!!!");
+										updateAccounts(accounts,accountDAO);
+									} else {
+										System.out.println("Overdraw Error!!!!");
+										updateAccounts(accounts,accountDAO);
+									}
+								}
+							}
+						}
+						
+						break;
+						
+					case 6 :
+						modifyUser();
+						break;
+						
+					case 7 :
+						BankManagement.runBank();
+						break;
+						
+					default :
+						updateAccounts(accounts, accountDAO);
 					}
+					
 				}
 			}
 			
 		}
 		
 	}
-}

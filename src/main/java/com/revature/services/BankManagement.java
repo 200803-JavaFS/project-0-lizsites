@@ -64,8 +64,17 @@ public class BankManagement {
 				String adminConsole = scan.nextLine();
 				if (adminConsole.toLowerCase().equals("y")) {
 					AdminService adminStuff = new AdminService();
-					adminStuff.modifyUser();
-				}
+					adminStuff.modifyUserWelcomeScreen();
+				} 
+			} else if (u.getRole().equals("employee")) {
+				bankLog.info("employee " + u.getUserName() + " has logged in!");
+				System.out.println("Would you like to enter the employee console?");
+				System.out.print("y/n?     ");
+				String empConsole = scan.nextLine();
+				if (empConsole.toLowerCase().equals("y")) {
+					EmployeeService empStuff = new EmployeeService();
+					empStuff.modifyUserWelcomeScreen();
+				} 
 			}
 			bankLog.info("user has logged in!");
 			printUserOptions(u);

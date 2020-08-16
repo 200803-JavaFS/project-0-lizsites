@@ -1,5 +1,6 @@
 package com.revature.services;
 
+import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -12,25 +13,76 @@ import com.revature.utilities.DAOUtilities;
 public class EmployeeService {
 	
 	private String role = "employee";
-
-	public boolean validateAccount (User u) {
-		Scanner scan = new Scanner(System.in);
-		System.out.println("New account applications!");
-		System.out.println("Name : " + u.getFirstName() + " " + u.getLastName() );
-		System.out.println("Username : " +u.getUserName());
-		
-		System.out.println("validate?");
-		System.out.println("Yes / No ?");
-		String validate = scan.nextLine().toLowerCase();
-		if (validate.equals("yes")) {
-			UserDAO userDao = DAOUtilities.getUserDAO();
-			userDao.addUser(u);
-			return true;
-		} else {
-			System.out.println(u.getFirstName() + " will not be validated.");
-			return false;
+	
+	
+	public void modifyUserWelcomeScreen(){
+		System.out.println("WELCOME EMPLOYEE TO THE BANK OF MONEY STUFF");
+		System.out.println("-------------ACTIVE USERS---------------");
+		for (User u : viewAllUsers()) {
+			System.out.println(u);
 		}
-}
+		System.out.println("|-----------------------------------------|");
+		AccountDAO accountDAO = DAOUtilities.getAccountDAO();
+		Set<Account> all = accountDAO.getAllAccounts();
+		Set<Account>  pending = new HashSet<>();
+		for (Account a : all) {
+			if (a.getStatus().equals("pending")) {
+				pending.add(a);
+			}
+		}
+		updateAccounts(pending);
+	}
+		
+	
+
+	public void updateAccounts (Set<Account> accounts) {
+		Scanner scan = new Scanner (System.in);
+		
+		
+		System.out.println("|------------ACCOUNT UPDATE MENU---------------|");
+		System.out.println("");
+		System.out.println("AS AN EMPLOYEE YOU ARE LIMITED TO APPROVAL AND DENIAL OF ACCOUNTS");
+		System.out.println("");
+		System.out.println("_____________Pending Accounts___________________");
+		for (Account a : accounts) {
+			System.out.println(a);
+			}
+			System.out.println("Enter the id of account you would like to approve/close:");
+			int id = scan.nextInt();
+			scan.nextLine();
+			for (Account a : accounts) {
+				if (a.getId()== id) {
+					System.out.println("Account to be updated: " + a.getAccountName() +", " +"$ " +a.getBalance()+ ", " + a.getStatus());
+					System.out.println("press [1] for approve");
+					System.out.println("press [2] for decline");
+					System.out.println("press another key to return to change menus");
+					int choice = scan.nextInt();
+					scan.nextLine();
+					if (choice==1) {
+					AccountDAO accountDAO = DAOUtilities.getAccountDAO();
+					a.setStatus("approved");
+					accountDAO.updateAccountStatus(a);
+					updateAccounts(accounts);
+					}else if (choice==2) {
+					AccountDAO accountDAO = DAOUtilities.getAccountDAO();
+					a.setStatus("declined");
+					accountDAO.updateAccountStatus(a);
+					updateAccounts(accounts);
+					} else {
+						System.out.println("go to log in screen?");
+						System.out.print("[y] / [n] ");
+						String answer = scan.nextLine();
+						if (answer.toLowerCase().equals("y")) {
+							BankManagement.login();
+						} else
+						updateAccounts(accounts);
+					}
+				}
+			}
+			
+		}
+		
+
 
 	public Set<User> viewAllUsers(){ 
 		UserDAO userDao = DAOUtilities.getUserDAO();
