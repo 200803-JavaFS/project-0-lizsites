@@ -39,14 +39,15 @@ public class TestBank {
 		
 		userDAO.removeUser(testUser);
 		accountDao.removeAccount(testAccount);
-		accountDao.addAccount(testAccount);
+		testAccount = accountDao.addAccount(testAccount);
 		userDAO.addUser(testUser);
-		assertTrue(accountDao.addUserToAccount(testAccount, testUser));
+		assertTrue(accountDao.addUserToAccount(testUser, testAccount));
 	}
 	
 	@Test
 	public void testDeposit() {
 		BankManagement.runBank();
+		testAccount = accountDao.getAccountBySerial(testAccount.getId());
 		double result = testAccount.getBalance();
 		assertTrue(result == 5100);
 	}

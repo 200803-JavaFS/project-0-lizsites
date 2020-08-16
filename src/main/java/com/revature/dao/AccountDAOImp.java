@@ -156,11 +156,13 @@ public class AccountDAOImp implements AccountDAO {
 	@Override
 	public boolean balanceChange(Account account, double amount) {
 		if ((account.getBalance() + amount) >= 0 ) {
+			account.setBalance(account.getBalance() + amount) ;
 			try {
 				Connection conn = DAOUtilities.getConnection();
 				String sql = "UPDATE accounts SET balance=? where id=?";
 				ps = conn.prepareStatement(sql);
 				ps.setDouble(1, account.getBalance());
+				ps.setInt(2,account.getId());
 				if (ps.executeUpdate()!=0) {
 					return true;
 				}
@@ -172,8 +174,29 @@ public class AccountDAOImp implements AccountDAO {
 	}
 	
 	@Override
-	public boolean transfer(Account account1, Account account2, double amount) {
-			
+	public boolean transfer(Account targetAccount, Account transferAccount, double amount) {
+			if ((targetAccount.getBalance()+amount >= 0 ) && (transferAccount.getBalance() - amount >=0)) {
+				targetAccount.setBalance(targetAccount.getBalance() + amount);
+				transferAccount.setBalance(transferAccount.getBalance() - amount);
+				
+				try {
+					Connection conn = DAOUtilities.getConnection();
+					String sql = "BEGIN;" +
+								"UPDATE accounts set balance=? where id=?;" +
+								"UPDATE accounts set balance=? where id=?;" +
+								"COMMIT;";
+					ps = conn.prepareStatement(sql);
+					ps.setDouble(1, targetAccount.getBalance());
+					ps.setInt(2, targetAccount.getId());
+					ps.setDouble(3, transferAccount.getBalance());
+					ps.setInt(4, transferAccount.getId());
+					if (ps.executeUpdate()!=0) {
+						return true;
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		return false;
 	}
 
@@ -184,12 +207,12 @@ public class AccountDAOImp implements AccountDAO {
 		Set<Account> searchAccount = new HashSet<Account>();
 		try {
 		Connection conn = DAOUtilities.getConnection();
-		String sql1 = "SELECT * FROM accounts where id = (select id from accounts_association where userid=?)";
+		String sql1 = "SELECT * FROM accounts INNER JOIN accounts_association ON accounts.id = accounts_association.id where (accounts_association.userid=?)";
 		ps = conn.prepareStatement(sql1);
 		ps.setString(1, userid);
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
-			Account account = new Account (rs.getInt(1), rs.getString(2) , rs.getString(3), rs.getDouble(4));
+			Account account = new Account (rs.getInt(1), rs.getString(2)  ,rs.getString(4),rs.getDouble(3));
 			searchAccount.add(account);
 		}
 		} catch (SQLException e) {

@@ -33,7 +33,6 @@ public class TestUsers {
 	
 	public static void main (String[] args) {
 		log.info("The application has started");
-		
 	}
 	
 	

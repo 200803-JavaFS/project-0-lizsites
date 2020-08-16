@@ -51,18 +51,27 @@ public class BankManagement {
 		User u = userDao.getUserById(username);
 		u.setAccounts(accountDao.searchAccountsByUserId(u.getUserName()));
 		if (u!=null){
-		bankLog.info("user has logged in!");
-		System.out.println(u);
+		
+		
 		System.out.println("ENTER YOUR PASSWORD " + u.getUserName());
 		String password = scan.nextLine();
 		
 		if (password.equals(u.getPassword())) {
+			bankLog.info("user has logged in!");
 			System.out.println("Does the meatbag request services?");
 			printUserOptions(u);
 		}
 	} 
-		System.out.println("Failure to login");
-		runBank();
+		System.out.println("about to exit!");
+		System.out.println("Would you like to abort program?");
+		System.out.println("Enter \"y\" to answer \"yes\" and exit.");
+		String answer = scan.nextLine();
+		if (answer.toLowerCase().equals("y")) {
+			System.out.println("have a good day!");
+		} else {
+			login();
+		}
+		
 	}
 	
 	
@@ -74,17 +83,19 @@ public class BankManagement {
 			System.out.println(a);
 		}
 		
-		String option1 = "Withdraw";
+		String option1 = "Apply for a New Account";
 		String option2 = "Deposit";
-		String option3 = "Change alias";
-		String option4 = "Add companion";
-		String option5 = "shock and burn";
+		String option3 = "WithDraw";
+		String option4 = "Transfer";
+		String option5 = "Add companion";
+		String option6 = "exit";
 		
 		optionList.add(option1);
 		optionList.add(option2);
 		optionList.add(option3);
 		optionList.add(option4);
 		optionList.add(option5);
+		optionList.add(option6);
 		for (String s : optionList) {
 			options++;
 			System.out.println("[" +options +"]" + ". " + s);
@@ -92,30 +103,107 @@ public class BankManagement {
 		String option = scan.nextLine();
 		switch (option) {
 		case  "1" : 
+			System.out.println("What name would you like to give your account?");
+			String name = scan.nextLine();
+			System.out.println("What is the initial deposit you'd like to make?");
+			double deposit = scan.nextDouble();
+			Account newAccount = new Account(name,deposit);
+			accountDao.addAccount(newAccount);
+			accountDao.addUserToAccount(newAccount , u);
+			System.out.println("Application sent!");
+			break;
+		case  "2" :
 			System.out.println("Select Account by Id");
 			int choice = scan.nextInt();
 			scan.nextLine();
+			
 			for (Account a : u.getAccounts()) {
 				if (a.getId()==choice) {
+					
 					System.out.println("Amount to be Deposited:");
 					double amount = scan.nextDouble();
 					scan.nextLine();
 					accountDao.balanceChange(a, amount);
+				} else {
+					System.out.println("Incorrect input!!");
+				}
+				printUserOptions(u);
+			}
+			
+			break;
+		case  "3" :
+			System.out.println("Select Account by Id");
+			int choice2 = scan.nextInt();
+			scan.nextLine();
+			
+			for (Account a : u.getAccounts()) {
+				if (a.getId()==choice2) {
+					
+					System.out.println("Amount to be Deposited:");
+					double amount = scan.nextDouble();
+					scan.nextLine();
+					accountDao.balanceChange(a, -amount);
+				} else {
+					System.out.println("Incorrect input!!");
+				}
+				printUserOptions(u);
+			}
+			break;
+		case  "4" :
+			System.out.println("Input the id of your account you'd like to start transfer with:");
+			for (Account a : u.getAccounts()) {
+				System.out.println(a);
+			}
+			int choice3 = scan.nextInt();
+			scan.nextLine();
+			for (Account a : u.getAccounts()) {
+				if (choice3 == a.getId()) {
+					System.out.println("this account?    " + a.getAccountName() + ", balance=" + a.getBalance());
+					System.out.println("Y/N?");
+					String answer = scan.nextLine();
+					if (answer.toLowerCase().equals("y")) {
+					System.out.println("Enter the id of an account you'd like to transfer to:");
+					int choice4 = scan.nextInt();
+					scan.nextLine();
+					Account b = accountDao.getAccountBySerial(choice4);
+					System.out.println("this account?    " + b.getAccountName());
+					System.out.println("Y/N?");
+					String answer2 = scan.nextLine();
+					if (answer.toLowerCase().equals("y")) {
+						System.out.println("Amount to be Transferred:");
+						double transfer = scan.nextDouble();
+						scan.nextLine();
+					accountDao.transfer(b,a,transfer);
+					}
+					}
 				}
 			}
 			
 			
-			break;
-		case  "2" :
-			
-			break;
-		case  "3" :
-			
-			break;
-		case  "4" :
 			
 			break;
 		case  "5" :
+			for (User user : userDao.getAllUsers()) {
+				System.out.println("username = " + user.getUserName() + ", name= " + user.getFirstName() + " " + user.getLastName());
+			}
+			System.out.println("Input the username of a user you would like to make a joint account with: ");
+			String username = scan.nextLine();
+			User jointUser = userDao.getUserById(username);
+			for (Account acc : u.getAccounts()) {
+				System.out.println(acc);
+			}
+			System.out.println("Enter account id of account you would to join:");
+			int jointId = scan.nextInt();
+			scan.nextLine();
+			for (Account acc : u.getAccounts()) {
+				if (jointId==acc.getId()) {
+					System.out.println("Applying for a Joint Account!");
+					accountDao.addUserToAccount(acc, jointUser);
+				}
+			
+			}
+			break;
+		case  "6" :
 			
 			break;
 		default :
