@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,13 +15,13 @@ import com.revature.models.User;
 import com.revature.utilities.DAOUtilities;
 
 public class AccountDAOImp implements AccountDAO {
-	Connection conn;
+	
 	PreparedStatement ps;
 	
 	public Set<Account> getAllAccounts(){
 		Set<Account> accounts = new HashSet<>();
 		try {
-			conn = DAOUtilities.getConnection();
+			Connection conn = DAOUtilities.getConnection();
 			String sql1 = "SELECT * FROM accounts";
 			ps = conn.prepareStatement(sql1);
 			ResultSet rs = ps.executeQuery();
@@ -38,7 +39,7 @@ public class AccountDAOImp implements AccountDAO {
 	public Account getAccountBySerial(int id) {
 		Account a = new Account();
 		try {
-			conn = DAOUtilities.getConnection();
+			Connection conn = DAOUtilities.getConnection();
 			String sql = "SELECT * from accounts where id=?";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, id);
@@ -62,11 +63,22 @@ public class AccountDAOImp implements AccountDAO {
 	 * This is the general use add account that will be used to add a full new account
 	 * */
 	@Override
-	public boolean addAccount(Account account, User u) {
-		if (addAccount(account)) {
-			if (addUserToAccount(u, account)) {
+	public boolean addUserToAccount(Account account, User u) {
+		try {
+			Connection conn = DAOUtilities.getConnection();
+			String sql = "BEGIN;" +
+						"INSERT INTO accounts_association (userid,id) values (?,?);"+
+						"COMMIT";
+			ps = conn.prepareStatement(sql);
+			int index = 1;
+			ps.setString(index++, u.getUserName());
+			ps.setInt(index++, account.getId());
+		if (ps.executeUpdate()!=0) {
 			return true;
 		}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
 		}
 		return false;
 	}
@@ -74,30 +86,39 @@ public class AccountDAOImp implements AccountDAO {
 	 * This is used to add a literal account with no user accounts table.
 	 * */
 	@Override
-	public boolean addAccount(Account account) {
+	public Account addAccount(Account account) {
+		
 		try {
-			conn = DAOUtilities.getConnection();
+			Connection conn = DAOUtilities.getConnection();
 			String sql1 = "INSERT INTO accounts (name,balance,status) values (?,?,?)";
 			ps = conn.prepareStatement(sql1);
 			
 			ps.setString(1, account.getAccountName());
 			ps.setDouble(2, account.getBalance());
 			ps.setString(3, "pending");
-			if (ps.executeUpdate()!= 0) {
-				return true;
+			ps.executeUpdate();
+			
+			String sql2 = "SELECT LASTVAL();";
+			Statement stt = conn.createStatement();
+			ResultSet rs = stt.executeQuery(sql2);
+			if (rs.next()) {
+				int key = rs.getInt(1);
+				System.out.println("key generated: " + key);
+				account.setId(key);
 			}
 			
 			
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return false;
+		return account;
+		
 	}
 	
 	@Override
 	public boolean addUserToAccount(User u, Account account) {
 		try {
-		conn = DAOUtilities.getConnection();
+		Connection conn = DAOUtilities.getConnection();
 		String sql1 = "INSERT INTO accounts_association (userid,id) values (?,?)";
 		ps = conn.prepareStatement(sql1);
 		ps.setString(1, u.getUserName());
@@ -115,41 +136,45 @@ public class AccountDAOImp implements AccountDAO {
 /*----------------------------------------------------------------------------------*/
 
 	@Override
-	public void removeAccount(Account account) {
+	public boolean removeAccount(Account account) {
 		try {
-		conn = DAOUtilities.getConnection();
+		Connection conn = DAOUtilities.getConnection();
 		String sql1 = "DELETE FROM accounts where id=?";
 		ps = conn.prepareStatement(sql1);
 		ps.setInt(1, account.getId());
-		ps.executeUpdate();
+		if (ps.executeUpdate()!=0) {
+			return true;
+		}
 		
 		System.out.println("removeAccount() has finished");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
-
+	
 	@Override
-	public void balanceChange(Account account, double amount) {
-		
-		try {
-			conn = DAOUtilities.getConnection();
-			String sql1 = "SELECT * FROM accounts where userid=?";
-			ps = conn.prepareStatement(sql1);
-			ps.setInt(1, account.getId());
-			ResultSet rs = ps.executeQuery();
-			
-			while (rs.next()) {
-				
-				
-			
+	public boolean balanceChange(Account account, double amount) {
+		if ((account.getBalance() + amount) >= 0 ) {
+			try {
+				Connection conn = DAOUtilities.getConnection();
+				String sql = "UPDATE accounts SET balance=? where id=?";
+				ps = conn.prepareStatement(sql);
+				ps.setDouble(1, account.getBalance());
+				if (ps.executeUpdate()!=0) {
+					return true;
+				}
+			} catch(SQLException e) {
+				e.printStackTrace();
 			}
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean transfer(Account account1, Account account2, double amount) {
 			
-			String sql2 = "UPDATE accounts SET accountbalance = ? where (userid=?)";
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} 
+		return false;
 	}
 
 	/*------------------------------------------------------------------------------------*/
@@ -158,7 +183,7 @@ public class AccountDAOImp implements AccountDAO {
 	public Set<Account> searchAccountsByUserId(String userid) {
 		Set<Account> searchAccount = new HashSet<Account>();
 		try {
-		conn = DAOUtilities.getConnection();
+		Connection conn = DAOUtilities.getConnection();
 		String sql1 = "SELECT * FROM accounts where id = (select id from accounts_association where userid=?)";
 		ps = conn.prepareStatement(sql1);
 		ps.setString(1, userid);

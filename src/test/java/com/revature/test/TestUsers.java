@@ -1,6 +1,6 @@
 package com.revature.test;
 
-import static org.junit.Assert.assertTrue; 
+import static org.junit.Assert.assertTrue;  
 
 import java.sql.Driver;
 import java.sql.SQLException;
@@ -18,8 +18,8 @@ import org.junit.Test;
 import com.revature.dao.AccountDAO;
 import com.revature.dao.UserDAO;
 import com.revature.models.Account;
-import com.revature.models.Admin;
 import com.revature.models.User;
+import com.revature.services.AdminService;
 import com.revature.utilities.DAOUtilities;
 
 public class TestUsers {
@@ -36,15 +36,14 @@ public class TestUsers {
 		
 	}
 	
-	public static void recur() {
-		recur();
-	}
+	
+	
 	public static User testUser = new User("Daniella123" , "Daniel" , "lincoln", "dovetail" , "human" );
 	public static Account testAccount = new Account("checking" , 5000);
 	public static AccountDAO accountDao = DAOUtilities.getAccountDAO();
 	public static UserDAO userDAO = DAOUtilities.getUserDAO();
 	
-	User result;
+	
 	
 		
 	
@@ -57,14 +56,15 @@ public class TestUsers {
 	}
 		@Test
 		public void testAddAccount() {
-			accountDao.addAccount(testAccount, testUser);
+			accountDao.addAccount(testAccount);
+			accountDao.addUserToAccount(testAccount, testUser);
 			assertTrue(accountDao.searchAccountsByUserId(testUser.getUserName())!=null);
 		}
 		
 		@Test
 		public void checkAdminAlter() {
 			
-			Admin a = new Admin();
+			AdminService a = new AdminService();
 			a.modifyUser();
 			User result = userDAO.getUserById("Daniella123");
 			assertTrue(result.getFirstName().equals("Daniella"));
@@ -73,7 +73,7 @@ public class TestUsers {
 		@Test
 		public void roleChange() {
 			
-			Admin a = new Admin();
+			AdminService a = new AdminService();
 			a.modifyUser();
 			User result = userDAO.getUserById("Daniella123");
 			assertTrue(result.getRole().equals("Employee"));
@@ -82,7 +82,7 @@ public class TestUsers {
 		@Test
 		public void passwordChange() {
 			
-			Admin a = new Admin();
+			AdminService a = new AdminService();
 			a.modifyUser();
 			User result = userDAO.getUserById("Daniella123");
 			assertTrue(result.getPassword().equals("password1"));
@@ -90,7 +90,7 @@ public class TestUsers {
 		
 		@Test
 		public void seeAccounts() {
-			Admin a = new Admin();
+			AdminService a = new AdminService();
 			a.modifyUser();
 			Set<Account> resultTest = accountDao.searchAccountsByUserId(testUser.getUserName());
 			assertTrue(resultTest!=null);

@@ -1,12 +1,14 @@
-package com.revature.models;
+package com.revature.services;
 
 import java.util.Scanner;
 import java.util.Set;
 
 import com.revature.dao.UserDAO;
+import com.revature.models.Account;
+import com.revature.models.User;
 import com.revature.utilities.DAOUtilities;
 
-public class Admin extends Employee {
+public class AdminService extends EmployeeService {
 	private String role = "admin";
 	
 	public void modifyUser(){

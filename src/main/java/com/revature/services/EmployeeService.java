@@ -1,13 +1,15 @@
-package com.revature.models;
+package com.revature.services;
 
 import java.util.Scanner;
 import java.util.Set;
 
 import com.revature.dao.AccountDAO;
 import com.revature.dao.UserDAO;
+import com.revature.models.Account;
+import com.revature.models.User;
 import com.revature.utilities.DAOUtilities;
 
-public class Employee extends User{
+public class EmployeeService {
 	
 	private String role = "employee";
 

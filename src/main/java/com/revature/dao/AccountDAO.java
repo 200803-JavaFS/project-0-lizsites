@@ -14,10 +14,11 @@ public interface AccountDAO {
 	public Account getAccountBySerial(int id);
 	
 	
-	public boolean addAccount(Account account);
-	public boolean addAccount(Account account, User u);
-	public void removeAccount(Account account);
-	public void balanceChange(Account account , double amount);
+	public Account addAccount(Account account);
+	public boolean addUserToAccount(Account account, User u);
+	public boolean removeAccount(Account account);
+	public boolean balanceChange(Account account, double amount);
+	public boolean transfer (Account account1, Account account2 , double amount);
 	public boolean addUserToAccount(User u, Account a);
 	
 	
