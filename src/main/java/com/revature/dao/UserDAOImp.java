@@ -39,6 +39,7 @@ public class UserDAOImp implements UserDAO {
 				
 				
 				User u = new User(userid,firstName, lastName, password, role);
+				
 				users.add(u);
 			}
 		} catch(SQLException e) {

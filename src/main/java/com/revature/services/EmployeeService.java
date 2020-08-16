@@ -13,9 +13,9 @@ public class EmployeeService {
 	
 	private String role = "employee";
 
-	public boolean validateUser (User u) {
+	public boolean validateAccount (User u) {
 		Scanner scan = new Scanner(System.in);
-		System.out.println("New user application!");
+		System.out.println("New account applications!");
 		System.out.println("Name : " + u.getFirstName() + " " + u.getLastName() );
 		System.out.println("Username : " +u.getUserName());
 		
@@ -27,7 +27,7 @@ public class EmployeeService {
 			userDao.addUser(u);
 			return true;
 		} else {
-			System.out.println(u.getFirstName() + "Will not be validated.");
+			System.out.println(u.getFirstName() + " will not be validated.");
 			return false;
 		}
 }

@@ -97,6 +97,6 @@ public class Account implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Account [balance=" + balance + ", id=" + id + ", accountName= " + this.accountName + ", isFrozen=" + this.status + "]";
+		return "Account [balance=" + balance + ", id=" + id + ", accountName= " + this.accountName + ", status=" + this.status + "]";
 	}
 }

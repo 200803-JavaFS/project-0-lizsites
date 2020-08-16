@@ -221,6 +221,26 @@ public class AccountDAOImp implements AccountDAO {
 		return searchAccount;
 	}
 
+	@Override
+	public boolean updateAccountStatus(Account account) {
+		try {
+			Connection conn = DAOUtilities.getConnection();
+			String sql = "UPDATE accounts set name=?,balance=?,status=? where id=?";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, account.getAccountName());
+			ps.setDouble(2, account.getBalance());
+			ps.setString(3, account.getStatus());
+			ps.setInt(4,  account.getId());
+			if (ps.executeUpdate()!=0) {
+				return true;
+				}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 	
 
 	}

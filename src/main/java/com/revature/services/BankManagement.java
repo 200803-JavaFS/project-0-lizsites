@@ -53,12 +53,21 @@ public class BankManagement {
 		if (u!=null){
 		
 		
-		System.out.println("ENTER YOUR PASSWORD " + u.getUserName());
+		System.out.println("ENTER YOUR PASSWORD:");
 		String password = scan.nextLine();
 		
 		if (password.equals(u.getPassword())) {
+			if (u.getRole().equals("admin")) {
+				bankLog.info("admin " + u.getUserName() + " has logged in!");
+				System.out.println("Would you like to enter the admin console?");
+				System.out.print("y/n?     ");
+				String adminConsole = scan.nextLine();
+				if (adminConsole.toLowerCase().equals("y")) {
+					AdminService adminStuff = new AdminService();
+					adminStuff.modifyUser();
+				}
+			}
 			bankLog.info("user has logged in!");
-			System.out.println("Does the meatbag request services?");
 			printUserOptions(u);
 		}
 	} 
@@ -90,6 +99,8 @@ public class BankManagement {
 		String option5 = "Add companion";
 		String option6 = "exit";
 		
+		
+		
 		optionList.add(option1);
 		optionList.add(option2);
 		optionList.add(option3);
@@ -119,15 +130,24 @@ public class BankManagement {
 			
 			for (Account a : u.getAccounts()) {
 				if (a.getId()==choice) {
-					
-					System.out.println("Amount to be Deposited:");
-					double amount = scan.nextDouble();
-					scan.nextLine();
-					accountDao.balanceChange(a, amount);
+					if (a.getStatus().equals("approved")) {
+						System.out.println("Amount to be Deposited:");
+						double amount = scan.nextDouble();
+						scan.nextLine();
+						accountDao.balanceChange(a, amount);
+						System.out.println("Deposit completed!");
+					} else if (a.getStatus().equals("pending") || a.getStatus().equals("declined")){
+							System.out.println("APOLOGIES! ACCOUNT CANNOT BE UPDATED UNTIL IT IS APPROVED!");
+							printUserOptions(u);
+					} else {
+						System.out.println("Incorrect input!!");
+					}
+				printUserOptions(u);
+			
 				} else {
 					System.out.println("Incorrect input!!");
+					printUserOptions(u);
 				}
-				printUserOptions(u);
 			}
 			
 			break;
@@ -138,11 +158,18 @@ public class BankManagement {
 			
 			for (Account a : u.getAccounts()) {
 				if (a.getId()==choice2) {
-					
-					System.out.println("Amount to be Deposited:");
+					if (a.getStatus().equals("approved")) {
+					System.out.println("Amount to be WithDrawn:");
 					double amount = scan.nextDouble();
 					scan.nextLine();
 					accountDao.balanceChange(a, -amount);
+					} else if (a.getStatus().equals("pending") || a.getStatus().equals("declined")){
+						System.out.println("APOLOGIES! ACCOUNT CANNOT BE UPDATED UNTIL IT IS APPROVED!");
+						printUserOptions(u);
+					} else {
+						System.out.println("Incorrect input!!");
+						printUserOptions(u);
+					}
 				} else {
 					System.out.println("Incorrect input!!");
 				}
@@ -158,6 +185,7 @@ public class BankManagement {
 			scan.nextLine();
 			for (Account a : u.getAccounts()) {
 				if (choice3 == a.getId()) {
+					if (a.getStatus().equals("approved")) {
 					System.out.println("this account?    " + a.getAccountName() + ", balance=" + a.getBalance());
 					System.out.println("Y/N?");
 					String answer = scan.nextLine();
@@ -166,6 +194,7 @@ public class BankManagement {
 					int choice4 = scan.nextInt();
 					scan.nextLine();
 					Account b = accountDao.getAccountBySerial(choice4);
+					if (b.getStatus().equals("approved")) {
 					System.out.println("this account?    " + b.getAccountName());
 					System.out.println("Y/N?");
 					String answer2 = scan.nextLine();
@@ -175,7 +204,21 @@ public class BankManagement {
 						scan.nextLine();
 					accountDao.transfer(b,a,transfer);
 					}
+					} else if (b.getStatus().equals("pending")||b.getStatus().equals("declined")) {
+						System.out.println("APOLOGIES BUT TARGET ACCOUNT MAY NOT ACCEPT TRANSFERS UNTIL ACCOUNT IS APPROVED");
+						printUserOptions(u);
+					} else {
+						System.out.println("Incorrect Input:");
+						printUserOptions(u);
 					}
+					}
+				} else if (a.getStatus().equals("pending")||a.getStatus().equals("declined")) {
+					System.out.println("APOLOGIES BUT YOU MAY NOT MAKE A TRANSFER UNTIL ACCOUNT IS APPROVED");
+					printUserOptions(u);
+				} else {
+					System.out.println("Incorrect input!");
+					printUserOptions(u);
+				}
 				}
 			}
 			

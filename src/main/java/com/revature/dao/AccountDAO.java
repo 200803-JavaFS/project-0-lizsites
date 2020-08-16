@@ -16,6 +16,7 @@ public interface AccountDAO {
 	
 	public Account addAccount(Account account);
 	public boolean addUserToAccount(Account account, User u);
+	public boolean updateAccountStatus(Account account);
 	public boolean removeAccount(Account account);
 	public boolean balanceChange(Account account, double amount);
 	public boolean transfer (Account account1, Account account2 , double amount);
