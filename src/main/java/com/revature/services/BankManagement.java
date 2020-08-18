@@ -136,101 +136,98 @@ public class BankManagement {
 			System.out.println("Select Account by Id");
 			int choice = scan.nextInt();
 			scan.nextLine();
-			
+			Account depAcc = new Account();
 			for (Account a : u.getAccounts()) {
 				if (a.getId()==choice) {
-					if (a.getStatus().equals("approved")) {
-						System.out.println("Amount to be Deposited:");
-						double amount = scan.nextDouble();
-						scan.nextLine();
-						accountDao.balanceChange(a, amount);
-						System.out.println("Deposit completed!");
-					} else if (a.getStatus().equals("pending") || a.getStatus().equals("declined")){
-							System.out.println("APOLOGIES! ACCOUNT CANNOT BE UPDATED UNTIL IT IS APPROVED!");
-							printUserOptions(u);
-					} else {
-						System.out.println("Incorrect input!!");
-					}
-				printUserOptions(u);
+				depAcc = a;
+				}
+			}
 			
+				if (depAcc.getStatus().equals("approved")) {
+					System.out.println("Amount to be Deposited:");
+					double amount = scan.nextDouble();
+					scan.nextLine();
+					accountDao.balanceChange(depAcc, amount);
+					System.out.println("Deposit completed!");
+				} else if (depAcc.getStatus().equals("pending") || depAcc.getStatus().equals("declined")){
+						System.out.println("APOLOGIES! ACCOUNT CANNOT BE UPDATED UNTIL IT IS APPROVED!");
+						printUserOptions(u);
+				} else {
+					System.out.println("Incorrect input!!");
+				}
+			printUserOptions(u);
+		
+			 
+			break;
+		case  "3" :
+			System.out.println("Select Account by Id");
+			String choice2 = scan.nextLine();
+			int choice2num = Integer.parseUnsignedInt(choice2);
+			Account withAcc = new Account();
+			for (Account a : u.getAccounts()) {
+				if (a.getId()==choice2num) {
+					withAcc = a;
+				}
+			}
+				if (withAcc.getStatus().equals("approved")) {
+				System.out.println("Amount to be WithDrawn:");
+				String amountString = scan.nextLine();
+				double amount = Double.parseDouble(amountString.replace("-", ""));
+			
+				accountDao.balanceChange(withAcc, -amount);
+				} else if (withAcc.getStatus().equals("pending") || withAcc.getStatus().equals("declined")){
+					System.out.println("APOLOGIES! ACCOUNT CANNOT BE UPDATED UNTIL IT IS APPROVED!");
+					printUserOptions(u);
 				} else {
 					System.out.println("Incorrect input!!");
 					printUserOptions(u);
 				}
-			}
 			
-			break;
-		case  "3" :
-			System.out.println("Select Account by Id");
-			int choice2 = scan.nextInt();
-			scan.nextLine();
-			
-			for (Account a : u.getAccounts()) {
-				if (a.getId()==choice2) {
-					if (a.getStatus().equals("approved")) {
-					System.out.println("Amount to be WithDrawn:");
-					double amount = scan.nextDouble();
-					scan.nextLine();
-					accountDao.balanceChange(a, -amount);
-					} else if (a.getStatus().equals("pending") || a.getStatus().equals("declined")){
-						System.out.println("APOLOGIES! ACCOUNT CANNOT BE UPDATED UNTIL IT IS APPROVED!");
-						printUserOptions(u);
-					} else {
-						System.out.println("Incorrect input!!");
-						printUserOptions(u);
-					}
-				} else {
-					System.out.println("Incorrect input!!");
-				}
-				printUserOptions(u);
-			}
+			printUserOptions(u);
 			break;
 		case  "4" :
 			System.out.println("Input the id of your account you'd like to start transfer with:");
 			for (Account a : u.getAccounts()) {
 				System.out.println(a);
 			}
-			int choice3 = scan.nextInt();
-			scan.nextLine();
+			String choice3string = scan.nextLine();
+			int choice3 = Integer.parseUnsignedInt(choice3string);
+			Account transferAccount = new Account();
 			for (Account a : u.getAccounts()) {
 				if (choice3 == a.getId()) {
-					if (a.getStatus().equals("approved")) {
-					System.out.println("this account?    " + a.getAccountName() + ", balance=" + a.getBalance());
-					System.out.println("Y/N?");
-					String answer = scan.nextLine();
-					if (answer.toLowerCase().equals("y")) {
-					System.out.println("Enter the id of an account you'd like to transfer to:");
-					int choice4 = scan.nextInt();
-					scan.nextLine();
-					Account b = accountDao.getAccountBySerial(choice4);
-					if (b.getStatus().equals("approved")) {
-					System.out.println("this account?    " + b.getAccountName());
-					System.out.println("Y/N?");
-					String answer2 = scan.nextLine();
-					if (answer.toLowerCase().equals("y")) {
-						System.out.println("Amount to be Transferred:");
-						double transfer = scan.nextDouble();
-						scan.nextLine();
-					accountDao.transfer(b,a,transfer);
-					}
-					} else if (b.getStatus().equals("pending")||b.getStatus().equals("declined")) {
-						System.out.println("APOLOGIES BUT TARGET ACCOUNT MAY NOT ACCEPT TRANSFERS UNTIL ACCOUNT IS APPROVED");
-						printUserOptions(u);
-					} else {
-						System.out.println("Incorrect Input:");
-						printUserOptions(u);
-					}
-					}
-				} else if (a.getStatus().equals("pending")||a.getStatus().equals("declined")) {
-					System.out.println("APOLOGIES BUT YOU MAY NOT MAKE A TRANSFER UNTIL ACCOUNT IS APPROVED");
-					printUserOptions(u);
-				} else {
-					System.out.println("Incorrect input!");
-					printUserOptions(u);
-				}
+					transferAccount = a;
 				}
 			}
-			
+			if (transferAccount.getStatus().equals("approved")) {
+				System.out.println("this account?    " + transferAccount.getAccountName() + ", balance=" + transferAccount.getBalance());
+				System.out.println("Y/N?");
+				String answer = scan.nextLine();
+				if (answer.toLowerCase().equals("y")) {
+				System.out.println("Enter the id of an account you'd like to transfer to:");
+				String choice4string = scan.nextLine();
+				int choice4 = Integer.parseUnsignedInt(choice4string);
+				Account target = accountDao.getAccountBySerial(choice4);
+				if (target.getStatus().equals("approved")) {
+				System.out.println("this account?    " + target.getAccountName());
+				System.out.println("Y/N?");
+				String answer2 = scan.nextLine();
+				if (answer.toLowerCase().equals("y")) {
+					System.out.println("Amount to be Transferred:");
+					String transferString = scan.nextLine();
+					double transfer = Double.parseDouble(transferString);
+					accountDao.transfer(target,transferAccount,transfer);
+				}
+				} else if (target.getStatus().equals("pending")||target.getStatus().equals("declined")) {
+					System.out.println("APOLOGIES BUT TARGET ACCOUNT MAY NOT ACCEPT TRANSFERS UNTIL ACCOUNT IS APPROVED");
+				} else {
+					System.out.println("Incorrect Input:");
+				}
+				}
+			} else if (transferAccount.getStatus().equals("pending")||transferAccount.getStatus().equals("declined")) {
+				System.out.println("APOLOGIES BUT YOU MAY NOT MAKE A TRANSFER UNTIL ACCOUNT IS APPROVED");
+				
+			} 
+				printUserOptions(u);
 			
 			
 			break;
