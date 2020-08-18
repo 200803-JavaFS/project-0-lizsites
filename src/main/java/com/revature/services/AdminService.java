@@ -144,7 +144,7 @@ public class AdminService extends EmployeeService {
 					System.out.println("press [2] to make a deposit");
 					System.out.println("press [3] to make a withdrawal");
 					System.out.println("press [4] to make a transfer");
-					System.out.println("press [5] to go to User Menu");
+					System.out.println("press [5] to go to Home Menu");
 					System.out.println("press [6] to exit Customer Console");
 					
 					Account updateAccount = new Account();
@@ -270,7 +270,7 @@ public class AdminService extends EmployeeService {
 						break;
 						
 					case 5 :
-						modifyUser();
+						modifyUserWelcomeScreen();
 						break;
 						
 					case 6 :

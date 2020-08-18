@@ -21,7 +21,7 @@ public interface AccountDAO {
 	public boolean balanceChange(Account account, double amount);
 	public boolean transfer (Account account1, Account account2 , double amount);
 	public boolean addUserToAccount(User u, Account a);
-	
+	public boolean testFunction(Account a, User u);
 	
 	
 	}

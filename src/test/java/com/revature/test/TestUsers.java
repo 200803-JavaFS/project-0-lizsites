@@ -37,8 +37,8 @@ public class TestUsers {
 	
 	
 	
-	public static User testUser = new User("Daniella123" , "Daniel" , "lincoln", "dovetail" , "human" );
-	public static Account testAccount = new Account("checking" , 5000);
+	public static User testUser = new User("Fisher" , "fisher" , "lincoln", "dovetail" , "human" );
+	public static Account testAccount = new Account("bad account" , 5000);
 	public static AccountDAO accountDao = DAOUtilities.getAccountDAO();
 	public static UserDAO userDAO = DAOUtilities.getUserDAO();
 	
@@ -55,8 +55,7 @@ public class TestUsers {
 	}
 		@Test
 		public void testAddAccount() {
-			accountDao.addAccount(testAccount);
-			accountDao.addUserToAccount(testAccount, testUser);
+			accountDao.testFunction(testAccount, testUser);
 			assertTrue(accountDao.searchAccountsByUserId(testUser.getUserName())!=null);
 		}
 		

@@ -241,6 +241,29 @@ public class AccountDAOImp implements AccountDAO {
 		return false;
 	}
 
+	@Override
+	public boolean testFunction(Account a, User u) {
+		try {
+			Connection conn = DAOUtilities.getConnection();
+			String sql = "BEGIN;" +
+						"SELECT addNewAccount(?,?,?);" +
+						"COMMIT;";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, a.getAccountName());
+			ps.setDouble(2, a.getBalance());
+			ps.setString(3, u.getUserName());
+			ResultSet rs = ps.executeQuery();
+				while (rs.next()) {
+					rs.getInt(1);
+					System.out.println("key generated ");
+				}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 	
 
 	}
