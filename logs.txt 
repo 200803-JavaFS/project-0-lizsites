@@ -211,3 +211,35 @@
 2020-08-18 21:59:50 INFO  BankManagement:70 - employee emp2 has logged in!
 2020-08-18 22:00:10 INFO  BankManagement:79 - user has logged in!
 2020-08-18 22:00:28 INFO  BankManagement:70 - employee emp2 has logged in!
+2020-08-18 22:06:51 INFO  BankManagement:27 - bank has opened!!
+2020-08-18 22:07:05 INFO  BankManagement:79 - user has logged in!
+2020-08-18 22:10:24 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-18 22:11:42 INFO  BankManagement:79 - user has logged in!
+2020-08-18 22:11:55 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-18 22:12:26 INFO  BankManagement:79 - user has logged in!
+2020-08-18 22:12:36 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-18 22:13:52 INFO  BankManagement:79 - user has logged in!
+2020-08-18 22:15:46 INFO  BankManagement:27 - bank has opened!!
+2020-08-18 22:16:07 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-18 22:16:27 INFO  BankManagement:79 - user has logged in!
+2020-08-18 22:16:39 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-18 22:18:00 INFO  BankManagement:79 - user has logged in!
+2020-08-18 22:19:22 INFO  BankManagement:79 - user has logged in!
+2020-08-18 22:19:33 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-18 22:19:42 INFO  BankManagement:79 - user has logged in!
+2020-08-18 22:19:50 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-18 22:24:17 INFO  BankManagement:27 - bank has opened!!
+2020-08-18 22:24:27 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-18 22:25:02 INFO  BankManagement:79 - user has logged in!
+2020-08-18 22:25:19 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-18 22:26:23 INFO  BankManagement:27 - bank has opened!!
+2020-08-18 22:26:38 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-18 22:27:18 INFO  BankManagement:79 - user has logged in!
+2020-08-18 22:27:29 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-18 22:28:15 INFO  BankManagement:79 - user has logged in!
+2020-08-18 22:39:20 INFO  BankManagement:27 - bank has opened!!
+2020-08-18 22:39:33 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-18 22:40:06 INFO  BankManagement:79 - user has logged in!
+2020-08-18 22:40:26 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-18 22:41:25 INFO  BankManagement:27 - bank has opened!!
+2020-08-18 22:42:04 INFO  BankManagement:79 - user has logged in!

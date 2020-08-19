@@ -175,7 +175,7 @@ public class AccountDAOImp implements AccountDAO {
 	
 	@Override
 	public boolean transfer(Account targetAccount, Account transferAccount, double amount) {
-			if ((targetAccount.getBalance()+amount >= 0 ) && (transferAccount.getBalance() - amount >=0)) {
+			if (((targetAccount.getBalance()+amount) >= 0 ) && ((transferAccount.getBalance() - amount) >=0)) {
 				targetAccount.setBalance(targetAccount.getBalance() + amount);
 				transferAccount.setBalance(transferAccount.getBalance() - amount);
 				
@@ -190,7 +190,7 @@ public class AccountDAOImp implements AccountDAO {
 					ps.setInt(2, targetAccount.getId());
 					ps.setDouble(3, transferAccount.getBalance());
 					ps.setInt(4, transferAccount.getId());
-					if (ps.executeUpdate()!=0) {
+					if (ps.executeUpdate()==0) {
 						return true;
 					}
 				} catch (SQLException e) {

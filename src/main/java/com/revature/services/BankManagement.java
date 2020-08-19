@@ -199,6 +199,7 @@ public class BankManagement {
 			for (Account a : u.getAccounts()) {
 				if (choice3 == a.getId()) {
 					transferAccount = a;
+					System.out.println("Account found");
 				}
 			}
 			if (transferAccount.getStatus().equals("approved")) {

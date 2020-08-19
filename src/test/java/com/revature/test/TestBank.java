@@ -39,9 +39,8 @@ public class TestBank {
 		
 		userDAO.removeUser(testUser);
 		accountDao.removeAccount(testAccount);
-		testAccount = accountDao.addAccount(testAccount);
 		userDAO.addUser(testUser);
-		assertTrue(accountDao.addUserToAccount(testUser, testAccount));
+		assertTrue(accountDao.testFunction(testAccount,testUser));
 	}
 	
 	@Test
@@ -62,13 +61,18 @@ public class TestBank {
 	
 	@Test
 	public void testTransfer() {
-		
+		testAccount = accountDao.getAccountBySerial(testAccount.getId());
+		Account testAccount2 = new Account("test savings" , 6000);
+		accountDao.testFunction(testAccount2, testUser);
+		BankManagement.runBank();
+		double result = testAccount2.getBalance();
+		assertTrue(result==5000);
 	}
 	
 	@AfterClass
 	public static void breakDown() {
-//		userDAO.removeUser(testUser);
-//		accountDao.removeAccount(testAccount);
+		userDAO.removeUser(testUser);
+		accountDao.removeAccount(testAccount);
 	}
 	
 }
