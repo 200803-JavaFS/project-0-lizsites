@@ -232,6 +232,7 @@ public class AccountDAOImp implements AccountDAO {
 			ps.setString(3, account.getStatus());
 			ps.setInt(4,  account.getId());
 			if (ps.executeUpdate()!=0) {
+				System.out.println("Status updated!!!");
 				return true;
 				}
 			
@@ -245,18 +246,19 @@ public class AccountDAOImp implements AccountDAO {
 	public boolean testFunction(Account a, User u) {
 		try {
 			Connection conn = DAOUtilities.getConnection();
-			String sql = "BEGIN;" +
-						"SELECT addNewAccount(?,?,?);" +
-						"COMMIT;";
+			String sql = "SELECT addNewAccount(?,?,?)";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, a.getAccountName());
 			ps.setDouble(2, a.getBalance());
 			ps.setString(3, u.getUserName());
 			ResultSet rs = ps.executeQuery();
-				while (rs.next()) {
-					rs.getInt(1);
-					System.out.println("key generated ");
-				}
+			if (rs.next()) {
+				int id = rs.getInt(1);
+				a.setId(id);
+				System.out.println("key generated:" +id);
+				return true;
+			}
+			
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

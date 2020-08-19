@@ -52,6 +52,19 @@ public class TestBank {
 		assertTrue(result == 5100);
 	}
 	
+	@Test
+	public void testWithDrawal() {
+		BankManagement.runBank();
+		testAccount = accountDao.getAccountBySerial(testAccount.getId());
+		double result = testAccount.getBalance();
+		assert(result == 4900);
+	}
+	
+	@Test
+	public void testTransfer() {
+		
+	}
+	
 	@AfterClass
 	public static void breakDown() {
 //		userDAO.removeUser(testUser);

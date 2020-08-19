@@ -34,7 +34,7 @@ CREATE TABLE public.users (
 
 create or replace function addNewAccount(newName character varying, newBalance double precision , newUser character varying) returns Integer as
 $$
-begin
+begin 
 insert into accounts (name, balance, status) values (newName , newBalance , 'pending');
 insert into accounts_association (userid, id) values (newUser, lastval());
 return lastval();

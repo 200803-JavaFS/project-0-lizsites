@@ -45,7 +45,7 @@ public class BankManagement {
 		
 		public static void login() {
 		System.out.println("Welcome to Deep Vine Internal, credentials human");
-		System.out.println("ENTER YOUR USERNAME");
+		System.out.println("ENTER YOUR USERNAME:");
 		String username = scan.nextLine();
 		
 		User u = userDao.getUserById(username);
@@ -127,10 +127,13 @@ public class BankManagement {
 			String name = scan.nextLine();
 			System.out.println("What is the initial deposit you'd like to make?");
 			double deposit = scan.nextDouble();
+			scan.nextLine();
 			Account newAccount = new Account(name,deposit);
-			accountDao.addAccount(newAccount);
-			accountDao.addUserToAccount(newAccount , u);
-			System.out.println("Application sent!");
+			if (accountDao.testFunction(newAccount,u)) {
+				System.out.println("New account applied for!!");
+				u.getAccounts().add(newAccount);
+			}
+			
 			break;
 		case  "2" :
 			System.out.println("Select Account by Id");
@@ -155,7 +158,7 @@ public class BankManagement {
 				} else {
 					System.out.println("Incorrect input!!");
 				}
-			printUserOptions(u);
+			
 		
 			 
 			break;
@@ -183,7 +186,7 @@ public class BankManagement {
 					printUserOptions(u);
 				}
 			
-			printUserOptions(u);
+			
 			break;
 		case  "4" :
 			System.out.println("Input the id of your account you'd like to start transfer with:");
@@ -227,7 +230,7 @@ public class BankManagement {
 				System.out.println("APOLOGIES BUT YOU MAY NOT MAKE A TRANSFER UNTIL ACCOUNT IS APPROVED");
 				
 			} 
-				printUserOptions(u);
+				
 			
 			
 			break;
@@ -251,6 +254,7 @@ public class BankManagement {
 				}
 			
 			}
+			
 			break;
 		case  "6" :
 			

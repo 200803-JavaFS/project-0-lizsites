@@ -10,7 +10,7 @@ import com.revature.models.User;
 import com.revature.utilities.DAOUtilities;
 
 public class AdminService extends EmployeeService {
-	private String role = "admin";
+	
 	
 	public void modifyUserWelcomeScreen(){
 		System.out.println("WELCOME ADMIN TO THE BANK OF MONEY STUFF");
@@ -172,13 +172,12 @@ public class AdminService extends EmployeeService {
 						if (approve==1) {
 						updateAccount.setStatus("approved");
 						accountDAO.updateAccountStatus(updateAccount);
-						updateAccounts(accounts, accountDAO);
+
 						} else if (approve == 2) {
 						updateAccount.setStatus("declined");
 						accountDAO.updateAccountStatus(updateAccount);
-						updateAccounts(accounts,accountDAO);
+
 						} 
-						updateAccounts(accounts, accountDAO);
 						break;
 						
 						
@@ -202,7 +201,7 @@ public class AdminService extends EmployeeService {
 						} else {
 							System.out.println("Overdraw Error!!!!!");
 						}
-						updateAccounts(accounts,accountDAO);
+
 						break;
 					case 3 :
 						System.out.println("|------------------------------------------|");
@@ -221,10 +220,10 @@ public class AdminService extends EmployeeService {
 						accountDAO = DAOUtilities.getAccountDAO();
 						if (accountDAO.balanceChange(updateAccount, -withdrawal)) {
 							System.out.println("Withdrawal successful!!!!");
-							updateAccounts(accounts,accountDAO);
+
 						} else {
 							System.out.println("Overdraw Error!!!!!!!");
-							updateAccounts(accounts,accountDAO);
+
 						}
 						break;
 						
@@ -260,10 +259,10 @@ public class AdminService extends EmployeeService {
 							scan.nextLine();
 							if (accountDAO.transfer(transferAccount, updateAccount, amount)) {
 								System.out.println("Transfer successful!!!");
-								updateAccounts(accounts,accountDAO);
+								
 							} else {
 								System.out.println("Overdraw Error!!!!");
-								updateAccounts(accounts,accountDAO);
+								
 							}
 						}
 						
