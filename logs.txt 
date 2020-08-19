@@ -243,3 +243,86 @@
 2020-08-18 22:40:26 INFO  BankManagement:61 - admin admin1 has logged in!
 2020-08-18 22:41:25 INFO  BankManagement:27 - bank has opened!!
 2020-08-18 22:42:04 INFO  BankManagement:79 - user has logged in!
+2020-08-18 23:30:39 INFO  BankManagement:27 - bank has opened!!
+2020-08-18 23:30:52 INFO  BankManagement:79 - user has logged in!
+2020-08-18 23:31:44 INFO  BankManagement:79 - user has logged in!
+2020-08-18 23:32:21 INFO  BankManagement:79 - user has logged in!
+2020-08-18 23:32:55 INFO  BankManagement:27 - bank has opened!!
+2020-08-18 23:33:03 INFO  BankManagement:79 - user has logged in!
+2020-08-19 00:07:17 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:07:34 INFO  BankManagement:79 - user has logged in!
+2020-08-19 00:07:58 INFO  AccountDAOImp:262 - User Daniella123 has made account gooooooo with generated key 62
+2020-08-19 00:08:22 INFO  BankManagement:79 - user has logged in!
+2020-08-19 00:11:32 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:11:43 INFO  BankManagement:79 - user has logged in!
+2020-08-19 00:12:17 INFO  BankManagement:79 - user has logged in!
+2020-08-19 00:18:53 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:19:04 INFO  BankManagement:79 - user has logged in!
+2020-08-19 00:23:02 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:23:10 INFO  BankManagement:79 - user has logged in!
+2020-08-19 00:23:30 INFO  AccountDAOImp:198 - Transfer completed!!
+2020-08-19 00:23:30 INFO  AccountDAOImp:199 - billy bob's: new balance: 1100.0
+2020-08-19 00:23:30 INFO  AccountDAOImp:200 - jimmy's: new balance: 2441.0
+2020-08-19 00:28:48 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:28:58 INFO  BankManagement:79 - user has logged in!
+2020-08-19 00:29:50 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:30:08 INFO  BankManagement:79 - user has logged in!
+2020-08-19 00:30:24 INFO  AccountDAOImp:198 - Transfer completed!!
+2020-08-19 00:30:24 INFO  AccountDAOImp:199 - jimmy's: new balance: 1441.0
+2020-08-19 00:30:24 INFO  AccountDAOImp:200 - billy bob's: new balance: 2100.0
+2020-08-19 00:30:42 INFO  AccountDAOImp:198 - Transfer completed!!
+2020-08-19 00:30:42 INFO  AccountDAOImp:199 - billy bob's: new balance: 1100.0
+2020-08-19 00:30:42 INFO  AccountDAOImp:200 - jimmy's: new balance: 2441.0
+2020-08-19 00:33:50 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:34:35 INFO  BankManagement:70 - employee emp2 has logged in!
+2020-08-19 00:38:38 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:38:46 INFO  BankManagement:70 - employee emp2 has logged in!
+2020-08-19 00:39:29 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:41:46 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:41:54 INFO  BankManagement:70 - employee emp2 has logged in!
+2020-08-19 00:42:28 INFO  BankManagement:70 - employee emp2 has logged in!
+2020-08-19 00:42:30 INFO  BankManagement:79 - user has logged in!
+2020-08-19 00:42:34 INFO  BankManagement:79 - user has logged in!
+2020-08-19 00:43:20 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:43:36 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-19 00:45:19 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:45:25 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-19 00:47:23 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:47:29 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-19 00:49:52 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:49:59 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-19 00:50:16 INFO  UserDAOImp:97 - User has been updated
+2020-08-19 00:51:10 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:51:17 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-19 00:51:53 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:51:59 INFO  UserDAOImp:67 - New user nullhas been made
+2020-08-19 00:52:03 INFO  UserDAOImp:97 - User kkkhas been updated
+2020-08-19 00:52:11 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-19 00:53:00 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:53:07 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-19 00:53:34 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:53:39 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-19 00:56:46 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 00:57:00 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-19 00:57:19 INFO  AccountDAOImp:171 - Transaction Complete!!
+2020-08-19 00:57:19 INFO  AccountDAOImp:172 - checking new balance :7600.0
+2020-08-19 00:57:19 INFO  BankManagement:79 - user has logged in!
+2020-08-19 00:57:35 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-19 00:57:57 INFO  AccountDAOImp:171 - Transaction Complete!!
+2020-08-19 00:57:57 INFO  AccountDAOImp:172 - checking new balance :3800.0
+2020-08-19 00:57:57 INFO  BankManagement:79 - user has logged in!
+2020-08-19 00:58:12 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-19 00:58:37 INFO  AccountDAOImp:200 - Transfer completed!!
+2020-08-19 00:58:37 INFO  AccountDAOImp:201 - checking: new balance: 3500.0
+2020-08-19 00:58:37 INFO  AccountDAOImp:202 - checking: new balance: 5200.0
+2020-08-19 00:58:37 INFO  BankManagement:79 - user has logged in!
+2020-08-19 01:00:20 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 01:00:28 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 01:00:37 INFO  BankManagement:61 - admin admin1 has logged in!
+2020-08-19 01:00:54 INFO  UserDAOImp:97 - User jojohas been updated
+2020-08-19 01:01:23 INFO  UserDAOImp:97 - User jameshas been updated
+2020-08-19 01:01:48 INFO  AccountDAOImp:200 - Transfer completed!!
+2020-08-19 01:01:48 INFO  AccountDAOImp:201 - checking: new balance: 0.0
+2020-08-19 01:01:48 INFO  AccountDAOImp:202 - Joe JOe: new balance: 6000.0
+2020-08-19 01:02:11 INFO  BankManagement:27 - bank has opened!!
+2020-08-19 01:02:18 INFO  BankManagement:79 - user has logged in!

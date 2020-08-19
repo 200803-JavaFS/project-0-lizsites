@@ -1,6 +1,7 @@
 package com.revature.services;
 
 import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -48,39 +49,49 @@ public class EmployeeService {
 			System.out.println(a);
 			}
 			System.out.println("Enter the id of account you would like to approve/close:");
+			try {
 			int id = scan.nextInt();
 			scan.nextLine();
+			
+			
+			Account openAccount = new Account();
 			for (Account a : accounts) {
-				if (a.getId()== id) {
-					System.out.println("Account to be updated: " + a.getAccountName() +", " +"$ " +a.getBalance()+ ", " + a.getStatus());
-					System.out.println("press [1] for approve");
-					System.out.println("press [2] for decline");
-					System.out.println("press another key to return to change menus");
-					int choice = scan.nextInt();
-					scan.nextLine();
-					if (choice==1) {
-					AccountDAO accountDAO = DAOUtilities.getAccountDAO();
-					a.setStatus("approved");
-					accountDAO.updateAccountStatus(a);
+				if ((a.getId()== id)&& a.getStatus().equals("pending")) {
+					openAccount = a;
+			}
+			}
+				System.out.println("Account to be updated: " + openAccount.getAccountName() +", " +"$ " +openAccount.getBalance()+ ", " + openAccount.getStatus());
+				System.out.println("press [1] for approve");
+				System.out.println("press [2] for decline");
+				System.out.println("press another key to return to change menus");
+				int choice = scan.nextInt();
+				scan.nextLine();
+				if (choice==1) {
+				AccountDAO accountDAO = DAOUtilities.getAccountDAO();
+				openAccount.setStatus("approved");
+				accountDAO.updateAccountStatus(openAccount);
+				updateAccounts(accounts);
+				}else if (choice==2) {
+				AccountDAO accountDAO = DAOUtilities.getAccountDAO();
+				openAccount.setStatus("declined");
+				accountDAO.updateAccountStatus(openAccount);
+				updateAccounts(accounts);
+				} else {
+					System.out.println("go to log in screen?");
+					System.out.print("[y] / [n] ");
+					String answer = scan.nextLine();
+					if (answer.toLowerCase().equals("y")) {
+						BankManagement.login();
+					} else
 					updateAccounts(accounts);
-					}else if (choice==2) {
-					AccountDAO accountDAO = DAOUtilities.getAccountDAO();
-					a.setStatus("declined");
-					accountDAO.updateAccountStatus(a);
-					updateAccounts(accounts);
-					} else {
-						System.out.println("go to log in screen?");
-						System.out.print("[y] / [n] ");
-						String answer = scan.nextLine();
-						if (answer.toLowerCase().equals("y")) {
-							BankManagement.login();
-						} else
-						updateAccounts(accounts);
-					}
 				}
+			} catch(InputMismatchException e) {
+				updateAccounts(accounts);
 			}
 			
-		}
+			} 
+			
+		
 		
 
 

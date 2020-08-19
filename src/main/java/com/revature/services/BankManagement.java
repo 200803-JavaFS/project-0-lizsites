@@ -133,7 +133,7 @@ public class BankManagement {
 				System.out.println("New account applied for!!");
 				u.getAccounts().add(newAccount);
 			}
-			
+			printUserOptions(u);
 			break;
 		case  "2" :
 			System.out.println("Select Account by Id");
@@ -148,19 +148,18 @@ public class BankManagement {
 			
 				if (depAcc.getStatus().equals("approved")) {
 					System.out.println("Amount to be Deposited:");
-					double amount = scan.nextDouble();
-					scan.nextLine();
+					String depositString = scan.nextLine();
+					double amount = Double.parseDouble(depositString.replace("-", ""));
 					accountDao.balanceChange(depAcc, amount);
-					System.out.println("Deposit completed!");
+					
 				} else if (depAcc.getStatus().equals("pending") || depAcc.getStatus().equals("declined")){
 						System.out.println("APOLOGIES! ACCOUNT CANNOT BE UPDATED UNTIL IT IS APPROVED!");
-						printUserOptions(u);
 				} else {
 					System.out.println("Incorrect input!!");
 				}
 			
 		
-			 
+			printUserOptions(u);
 			break;
 		case  "3" :
 			System.out.println("Select Account by Id");
@@ -180,13 +179,11 @@ public class BankManagement {
 				accountDao.balanceChange(withAcc, -amount);
 				} else if (withAcc.getStatus().equals("pending") || withAcc.getStatus().equals("declined")){
 					System.out.println("APOLOGIES! ACCOUNT CANNOT BE UPDATED UNTIL IT IS APPROVED!");
-					printUserOptions(u);
 				} else {
 					System.out.println("Incorrect input!!");
-					printUserOptions(u);
 				}
 			
-			
+			printUserOptions(u);
 			break;
 		case  "4" :
 			System.out.println("Input the id of your account you'd like to start transfer with:");
@@ -199,7 +196,7 @@ public class BankManagement {
 			for (Account a : u.getAccounts()) {
 				if (choice3 == a.getId()) {
 					transferAccount = a;
-					System.out.println("Account found");
+					
 				}
 			}
 			if (transferAccount.getStatus().equals("approved")) {
@@ -211,6 +208,11 @@ public class BankManagement {
 				String choice4string = scan.nextLine();
 				int choice4 = Integer.parseUnsignedInt(choice4string);
 				Account target = accountDao.getAccountBySerial(choice4);
+				for (Account a : u.getAccounts()) {
+					if (target.getId() == a.getId()) {
+						target = a;
+					}
+				}
 				if (target.getStatus().equals("approved")) {
 				System.out.println("this account?    " + target.getAccountName());
 				System.out.println("Y/N?");
@@ -218,8 +220,10 @@ public class BankManagement {
 				if (answer.toLowerCase().equals("y")) {
 					System.out.println("Amount to be Transferred:");
 					String transferString = scan.nextLine();
-					double transfer = Double.parseDouble(transferString);
-					accountDao.transfer(target,transferAccount,transfer);
+					double transfer = Double.parseDouble(transferString.replace("-", ""));
+					if(accountDao.transfer(target,transferAccount,transfer)) {
+						
+					}
 				}
 				} else if (target.getStatus().equals("pending")||target.getStatus().equals("declined")) {
 					System.out.println("APOLOGIES BUT TARGET ACCOUNT MAY NOT ACCEPT TRANSFERS UNTIL ACCOUNT IS APPROVED");
@@ -233,7 +237,7 @@ public class BankManagement {
 			} 
 				
 			
-			
+			printUserOptions(u);
 			break;
 		case  "5" :
 			for (User user : userDao.getAllUsers()) {
@@ -255,7 +259,7 @@ public class BankManagement {
 				}
 			
 			}
-			
+			printUserOptions(u);
 			break;
 		case  "6" :
 			
@@ -265,17 +269,6 @@ public class BankManagement {
 		
 	}
 	
-	public static void scanChoice(int choice) {
-		
-	}
-	
-	/*
-	 * The purpose this method is to possibly reduce the amount of trips
-	 * the application will take to the database.
-	 * 
-	 * While the difference may be negligible on the scale we're operating on,
-	 * I think it would be good practice for later projects.
-	 * */
 	
 	public static void createUser() {
 		

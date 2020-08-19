@@ -10,12 +10,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+
 import com.revature.models.Account;
 import com.revature.models.User;
+import com.revature.services.BankManagement;
 import com.revature.utilities.DAOUtilities;
 
 public class AccountDAOImp implements AccountDAO {
-	
+	private static final org.apache.logging.log4j.Logger accountLog = LogManager.getLogger(AccountDAOImp.class);
 	PreparedStatement ps;
 	
 	public Set<Account> getAllAccounts(){
@@ -74,6 +77,7 @@ public class AccountDAOImp implements AccountDAO {
 			ps.setString(index++, u.getUserName());
 			ps.setInt(index++, account.getId());
 		if (ps.executeUpdate()!=0) {
+			accountLog.info("User " + u.getUserName() + " has been given joint account " + account.getAccountName());
 			return true;
 		}
 			
@@ -103,7 +107,7 @@ public class AccountDAOImp implements AccountDAO {
 			ResultSet rs = stt.executeQuery(sql2);
 			if (rs.next()) {
 				int key = rs.getInt(1);
-				System.out.println("key generated: " + key);
+				accountLog.info("New Account has been created with Key: " + key);
 				account.setId(key);
 			}
 			
@@ -164,6 +168,8 @@ public class AccountDAOImp implements AccountDAO {
 				ps.setDouble(1, account.getBalance());
 				ps.setInt(2,account.getId());
 				if (ps.executeUpdate()!=0) {
+					accountLog.info("Transaction Complete!!");
+					accountLog.info(account.getAccountName() + " new balance :" + account.getBalance());
 					return true;
 				}
 			} catch(SQLException e) {
@@ -191,6 +197,9 @@ public class AccountDAOImp implements AccountDAO {
 					ps.setDouble(3, transferAccount.getBalance());
 					ps.setInt(4, transferAccount.getId());
 					if (ps.executeUpdate()==0) {
+						accountLog.info("Transfer completed!!");
+						accountLog.info(transferAccount.getAccountName()+ ": new balance: " + transferAccount.getBalance());
+						accountLog.info(targetAccount.getAccountName() + ": new balance: " + targetAccount.getBalance());
 						return true;
 					}
 				} catch (SQLException e) {
@@ -255,7 +264,7 @@ public class AccountDAOImp implements AccountDAO {
 			if (rs.next()) {
 				int id = rs.getInt(1);
 				a.setId(id);
-				System.out.println("key generated:" +id);
+				accountLog.info("User " +u.getUserName() + " has made account " + a.getAccountName() + " with generated key " + id);
 				return true;
 			}
 			

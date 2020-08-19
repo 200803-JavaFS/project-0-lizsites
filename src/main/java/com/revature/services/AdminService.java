@@ -1,5 +1,6 @@
 package com.revature.services;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -25,14 +26,14 @@ public class AdminService extends EmployeeService {
 		System.out.println("[3] to exit to Customer Console");
 		
 		Scanner scan = new Scanner(System.in);
-		int choice = scan.nextInt();
-		if (choice == 1) {
+		String choice = scan.nextLine();
+		if (choice.equals("1")) {
 		modifyUser();
-		} else if (choice == 2) {
+		} else if (choice.equals("2")) {
 			AccountDAO accountDAO =DAOUtilities.getAccountDAO();
 			Set<Account> accounts = accountDAO.getAllAccounts();
 			updateAccounts(accounts, accountDAO);
-		} else if (choice == 3) {
+		} else if (choice.equals("3")) {
 			BankManagement.login();
 		} else {
 			System.out.println("Incorrect Input!!!");
@@ -149,12 +150,12 @@ public class AdminService extends EmployeeService {
 					
 					Account updateAccount = new Account();
 					
+					try {
 					
-					int choice = scan.nextInt();
-					scan.nextLine();
+					String choice = scan.nextLine();
 					
 					switch (choice) {
-					case 1 :
+					case "1" :
 						System.out.println("|------------------------------------------|");
 						System.out.println("Enter the id of account you would like to modify:");
 						int id = scan.nextInt();
@@ -177,11 +178,12 @@ public class AdminService extends EmployeeService {
 						updateAccount.setStatus("declined");
 						accountDAO.updateAccountStatus(updateAccount);
 
-						} 
+						}
+						updateAccounts(accounts,accountDAO);
 						break;
 						
 						
-					case 2 :
+					case "2" :
 						
 						System.out.println("|------------------------------------------|");
 						System.out.println("Enter the id of account you would like to modify:");
@@ -194,29 +196,29 @@ public class AdminService extends EmployeeService {
 						}
 						System.out.println("account= " + updateAccount.getAccountName() + ", balance= $ " +updateAccount.getBalance() +", status= " + updateAccount.getStatus());
 						System.out.print("Amount to be Deposited:    ");
-						double amount = scan.nextDouble();
-						scan.nextLine();
-						if (accountDAO.balanceChange(updateAccount, amount)) {
+						String depositAmount = scan.nextLine();
+						double deposit = Double.parseDouble(depositAmount.replace("-", ""));
+						if (accountDAO.balanceChange(updateAccount, deposit)) {
 							System.out.println("Deposit successful!!!!");
 						} else {
 							System.out.println("Overdraw Error!!!!!");
 						}
-
+						updateAccounts(accounts,accountDAO);
 						break;
-					case 3 :
+					case "3" :
 						System.out.println("|------------------------------------------|");
 						System.out.println("Enter the id of account you would like to modify:");
 						int id3 = scan.nextInt();
 						scan.nextLine();
 						for (Account b : accounts) {
-							if (b.getId()==id3) {
+				 			if (b.getId()==id3) {
 								updateAccount = b;
 							}
 						}
 						System.out.println("account= " + updateAccount.getAccountName() + ", balance= $ " +updateAccount.getBalance() +", status= " + updateAccount.getStatus());
 						System.out.print("Amount to be Withdrawn: ");
-						double withdrawal = scan.nextDouble();
-						scan.nextLine();
+						String withdrawalString = scan.nextLine();
+						double withdrawal = Double.parseDouble(withdrawalString.replace("-", ""));
 						accountDAO = DAOUtilities.getAccountDAO();
 						if (accountDAO.balanceChange(updateAccount, -withdrawal)) {
 							System.out.println("Withdrawal successful!!!!");
@@ -225,9 +227,10 @@ public class AdminService extends EmployeeService {
 							System.out.println("Overdraw Error!!!!!!!");
 
 						}
+						updateAccounts(accounts,accountDAO);
 						break;
 						
-					case 4 :
+					case "4":
 						System.out.println("|------------------------------------------|");
 						System.out.println("Enter the id of account you would like to modify:");
 						int id4 = scan.nextInt();
@@ -255,9 +258,9 @@ public class AdminService extends EmployeeService {
 						if (yesno.toLowerCase().equals("y")) {
 							System.out.println("Amount to be transferred: ");
 							System.out.print("Amount: ");
-							amount = scan.nextDouble();
-							scan.nextLine();
-							if (accountDAO.transfer(transferAccount, updateAccount, amount)) {
+							String doubleAmount = scan.nextLine();
+							double transfer = Double.parseDouble(doubleAmount.replace("-", ""));
+							if (accountDAO.transfer(transferAccount, updateAccount, transfer)) {
 								System.out.println("Transfer successful!!!");
 								
 							} else {
@@ -265,14 +268,14 @@ public class AdminService extends EmployeeService {
 								
 							}
 						}
-						
+						updateAccounts(accounts,accountDAO);
 						break;
 						
-					case 5 :
+					case "5" :
 						modifyUserWelcomeScreen();
 						break;
 						
-					case 6 :
+					case "6" :
 						BankManagement.runBank();
 						break;
 						
@@ -280,6 +283,11 @@ public class AdminService extends EmployeeService {
 						updateAccounts(accounts, accountDAO);
 					}
 					
+					} catch (NumberFormatException e) {
+						updateAccounts(accounts, accountDAO);
+					} catch(InputMismatchException e) {
+						updateAccounts(accounts, accountDAO);
+					} 
 				}
 			
 			

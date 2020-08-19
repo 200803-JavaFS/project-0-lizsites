@@ -9,12 +9,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
 import com.revature.models.User;
+import com.revature.services.BankManagement;
 import com.revature.utilities.DAOUtilities;
 
 public class UserDAOImp implements UserDAO {
+	private static final org.apache.logging.log4j.Logger userLog = LogManager.getLogger(UserDAOImp.class);
 	Connection conn;
 	PreparedStatement ps;
 	private static AccountDAO accountDAO = DAOUtilities.getAccountDAO();
@@ -45,6 +48,7 @@ public class UserDAOImp implements UserDAO {
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
+		
 		return users;
 	}
 	
@@ -60,6 +64,7 @@ public class UserDAOImp implements UserDAO {
 			ps.setString(4, u.getPassword());
 			ps.setString(5, u.getRole());
 			if (ps.executeUpdate()!=0) {
+				userLog.info("New user " + u.getFirstName() + "has been made");
 				return true;
 			}
 			
@@ -89,6 +94,7 @@ public class UserDAOImp implements UserDAO {
 			ps.setString(5, u.getRole());
 			ps.setString(6, oldId);
 			if (ps.executeUpdate()!=0) {
+				userLog.info("User " + u.getFirstName() + "has been updated");
 				return true;
 			}
 		} catch (SQLException e) {
